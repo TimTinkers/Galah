@@ -1,0 +1,15 @@
+# The URL of the Ethereum node to connect to.
+nodeURL=
+
+# The private key of the wallet to pay transaction fees from.
+privateKey=
+
+# The public address of the example Counter contract.
+# Default value is 0xdfd3DC96AAdeFfea374bDE3380Ed20c4072F46b7 on Kovan network.
+contractAddress=0xdfd3DC96AAdeFfea374bDE3380Ed20c4072F46b7
+
+# The gas price in wei paid for transactions. Default is 22000000000.
+gasPrice=22000000000
+
+# The limit on amount of gas used during execution. Default is 4300000.
+gasLimit=4300000
