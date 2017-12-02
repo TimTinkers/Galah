@@ -7,6 +7,9 @@ In the "CounterContract" folder, this repository includes all files necessary to
 In the specified folder's "configuration.js" file one can specify a node URL and 12 word secret phrase, which are both used to deploy the contract from some account. In the examples here I am deploying to a cloud-hosted node on the Kovan test network using [Infura](https://infura.io/). The example contract also includes a "counter.js" test file in its test directory to verify the correct behavior of the example contract.
 
 ## The Networking Layer
+In the "GalahServer" folder, this repository includes an example server which uses [Web3j](https://web3j.io/) to communicate with the deployed Counter contract and the [LowEntry Socket Connection](https://www.unrealengine.com/marketplace/low-entry-socket-connection) plugin to communicate with the Unreal Engine. Additionally, this server has a dependency on [json-simple](https://github.com/fangyidong/json-simple), a JSON parser which is used to generate the JSON packets sent between the server and the Unreal Engine application. The Java wrapper for the Counter contract was generated using these [Web3j instructions](https://docs.web3j.io/smart_contracts.html#smart-contract-wrappers). The resulting .abi and .bin files are included in "CounterContract/solc_compiled" and required separate installation of the [solc-js](https://github.com/ethereum/solc-js) Solidity compiler bindings.
+
+When starting, this server first reads configuration details from "config/config.txt" where the user must specify the URL of their Ethereum node and the private key of the wallet used to pay for transaction fees incurred when interacting with the smart contract. Once it has successfully connected to the smart contract, the server simply opens a socket and listens for incoming JSON messages. The server responds to messages with two different "action" field values: "increment" and "read." These fields respectively determine whether the server will issue a function call to the Counter contract to increment its count variable, or whether it will read the value of count and return this to the initial sender.
 
 ## The Unreal Engine Project
 
@@ -23,3 +26,5 @@ This project requires and would not have been possible without the following fra
 - [Infura](https://infura.io/), a gateway for cloud-hosted Ethereum nodes.
 - [Web3j](https://web3j.io/), a lightweight, reactive, type-safe Java and Android library for integrating with nodes on Ethereum blockchains.
 - [LowEntry Socket Connection](https://www.unrealengine.com/marketplace/low-entry-socket-connection), a useful networking plugin for the Unreal Engine with native Java integration.
+- [json-simple](https://github.com/fangyidong/json-simple), a simple and fast JSON parser.
+- [solc-js](https://github.com/ethereum/solc-js), JavaScript Solidity compiler bindings used here to create the Java contract wrapper.
