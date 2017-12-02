@@ -1,5 +1,12 @@
 # Galah
-Galah is a demonstration using Web3j and a Java networking layer to show the Unreal Engine interacting with a smart contract. The project consists of three distinct parts: the Solidity smart contract, the Java networking middle layer, and the Unreal Engine project.
+Galah is a demonstration using Web3j and a Java networking layer to show the Unreal Engine interacting with a smart contract. The project consists of three distinct parts: the Solidity smart contract, the Java networking middle layer, and the Unreal Engine project. Together these pieces form a system capable of bridging the Unreal Engine's robust visualization tools and the decentralized computing benefits of smart contracts.
+
+<p float="left">
+  <img width="285" height="285" src="Media/Galah.jpg"/>
+  <img height="285" src="Media/GalahArchitecture.PNG"/>
+</p>
+
+The motivation for such a project is the wide range of technical improvements that Unreal Engine games could feature if able to hook into smart contracts. A decentralized way of storing and sharing in-game content? Unique tracking of virtual game assets? A much more robust payment and trading platform for in-game resources? All of these applications are possible with this bridge in place.
 
 ## The Smart Contract
 In the "CounterContract" folder, this repository includes all files necessary to setup a [Truffle](https://github.com/trufflesuite/truffle) project to test and deploy a simple "Counter.sol" Solidity smart contract counter which can increment and store a public integer. The example contract as it is deployed live for the demonstrations here can be viewed [here with Etherscan](https://kovan.etherscan.io/address/0xdfd3dc96aadeffea374bde3380ed20c4072f46b7). The Counter was kept intentionally simple for this demonstration, but the interaction between the Unreal Engine and smart contracts is easily extensible to more interesting cases.
@@ -13,6 +20,37 @@ When starting, this server first reads configuration details from "config/config
 
 ## The Unreal Engine Project
 In the "GalahProject" folder, this repository includes an example [Unreal Engine 4.17](https://www.unrealengine.com/en-US/blog) project which communicates with the Java networking layer to relay messages to and from the Counter smart contract. Once again, this requires the [LowEntry Socket Connection](https://www.unrealengine.com/marketplace/low-entry-socket-connection) plugin to facilitate communication through JSON messages.
+
+For this project, the Unreal Engine communication logic was developed using the blueprint visual scripting tools. Here is an image of the section which establishes the connection to the Java networking layer during initial setup of the Unreal Engine game mode.
+
+|![Game Mode Server Connection](Media/GameModeConnection.PNG)|
+|:-:|
+|The example Unreal Engine blueprint used to establish a connection to the server.|
+
+Once the Unreal Engine application has established connection to the Java networking server, it can send JSON messages which communicate its requests for interaction with the smart contract. The Java server will in turn pass these requests onto Counter, and if applicable return the results. In the example project, this is used to periodically refresh a screen with the newest count by sending the "read" action field to the Java server.
+
+|![Screen Refresh Messaging](Media/ScreenRefreshRead.PNG)|
+|:-:|
+|This blueprint periodically requests the value of Counter's "count" variable to update the in-game screen.|
+
+Smart contract functions can also be executed in response to in-game actions. This project includes a simple red box with a collision detector. When triggered, it sends a packet with the "increment" action field to the Java server. This in turn fires the increment function of the Counter smart contract.
+
+|![Sending a Request for Incrementing](Media/TriggerBoxIncrement.PNG)|
+|:-:|
+|This blueprint is for the red box which, when struck, requests that Counter's increment function be called.|
+
+## Demonstration
+The following clips show the entire interaction from Unreal Engine to smart contract in action. The console shows the messages logged by the Java networking layer when some update messages pass through it.
+
+|![Demonstration of Java server networking.](Media/JavaRelay.gif)|
+|:-:|
+|Demonstrating the flow of data through the Java layer.|
+
+The in-game demonstration shows the value of the Counter being displayed on an in-game screen, the real-time update wait when the user requests that the value be incremented, and demonstrates the persistence of this value even when the game is exited and reloaded.
+
+|![Demonstration of in-game interaction.](Media/EngineDemo.gif)|
+|:-:|
+|Demonstrating the in-game interactions of project blueprints.|
 
 ## References
 The following resoures proved helpful for developing this project.
